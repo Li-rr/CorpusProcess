@@ -132,7 +132,9 @@ class DataReader:
     def buildImage2numpy(self):
         '''
         处理思路：
-        从char字典中获取的字的id然后来顺序读取
+        从char字典中获取的字的id然后来顺序读取,
+        
+        这里需要注意，索引id 0 是用于补全的，这里取均值
         '''
         self.logger.info("开始构建图像矩阵")
         char2ix = utils.pkl_load(self.savePath+"char2ix.pkl")
@@ -153,12 +155,19 @@ class DataReader:
                 
                 # break
 
-        np_img_list =np.array(img_list)
+        np_img_list =np.array(img_list) # [5240,40,40]
+        # print(np_img_list.shape,np_img_list.dtype)
+        np_img_mean = np_img_list.mean(0) # [40,40]
+        # print(np_img_mean.shape)
 
-     
+        # sys.exit(0)
         if len(char2ix) == np_img_list.shape[0]:
             self.logger.info("数据读取完毕，保存图片：%d 个" %(len(char2ix)) )            
-            np_mean_img_list = np_img_list - np_img_list.mean()
+            np_mean_img_list = np_img_list - np_img_mean
+            np_mean_img_list = np.insert(np_mean_img_list,0,np_img_mean,0) # 插入元素
+            np_img_list = np.insert(np_img_list,0,np_img_mean,0) # 插入元素
+
+            print(np_img_list.shape,np_mean_img_list.shape)
             utils.pkl_dump(np_mean_img_list,self.savePath+"char_img_mean_blackground.pkl")
             utils.pkl_dump(np_img_list,self.savePath+"char_img_blackground.pkl")
         else:
