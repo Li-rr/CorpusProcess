@@ -1,0 +1,9 @@
+*.bz2
+*.pyc
+log/
+stat/word_freq.pkl
+stat/word2id.pkl
+stat/img/
+stat/img_black_ground/
+test/
+wiki/
