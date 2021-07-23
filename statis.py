@@ -5,7 +5,7 @@ from cfg import configs
 from logginger import init_logger
 import utils
 import time
-
+from PIL import Image
 class DataReader:
 
     def __init__(self,inputFileName,logger,savePath="./stat/") -> None:
@@ -147,6 +147,7 @@ class DataReader:
         
             for idx,(ch,ch_id) in enumerate(char2ix.items()):
                 imgPath = os.path.join("D:\WORKSPACE\CorpusProcess\stat\img_black_ground","{}.jpg".format(ch_id))
+                # imgPath = os.path.join("D:\WORKSPACE\CorpusProcess\stat\img","{}.jpg".format(ch_id))
                 imgArray = utils.image2numpy(imgPath)
 
                 # print(imgPath)
@@ -158,6 +159,8 @@ class DataReader:
         np_img_list =np.array(img_list) # [5240,40,40]
         # print(np_img_list.shape,np_img_list.dtype)
         np_img_mean = np_img_list.mean(0) # [40,40]
+        img_mean = Image.fromarray(np_img_mean)
+        img_mean.convert("RGB").save("fuck.jpg")
         # print(np_img_mean.shape)
 
         # sys.exit(0)
@@ -168,8 +171,10 @@ class DataReader:
             np_img_list = np.insert(np_img_list,0,np_img_mean,0) # 插入元素
 
             print(np_img_list.shape,np_mean_img_list.shape)
-            utils.pkl_dump(np_mean_img_list,self.savePath+"char_img_mean_blackground.pkl")
-            utils.pkl_dump(np_img_list,self.savePath+"char_img_blackground.pkl")
+            # utils.pkl_dump(np_mean_img_list,self.savePath+"char_img_mean.pkl")
+            # utils.pkl_dump(np_img_list,self.savePath+"char_img.pkl")
+            utils.pkl_dump(np_mean_img_list,self.savePath+"char_img_mean_bg.pkl")
+            utils.pkl_dump(np_img_list,self.savePath+"char_img_bg.pkl")
         else:
             self.logger.info("字典数量：%d，图片数量：%d" % (len(char2ix),np_img_list.shape[0]))
         
