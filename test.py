@@ -74,17 +74,19 @@ def test3():
     '''
     char2ix = utils.pkl_load("./stat/char2ix.pkl")
 
-    np_img = utils.pkl_load("./stat/char_img.pkl")
-    np_img_mean = utils.pkl_load("./stat/char_img_mean.pkl")
+    np_img = utils.pkl_load("./stat/char_img_bg.pkl")
+    np_img_mean = utils.pkl_load("./stat/char_img_mean_bg.pkl")
     print(np_img.dtype)
 
-  
+    img_0 = np_img[0]
+    img = Image.fromarray(img_0)
+    img.convert("RGB").save("./test/0.jpg")
     print(np_img_mean.dtype)
     for idx, (ch,ch_id) in enumerate(char2ix.items()):
         # break
         # print(ch_id)
-        img = np_img[ch_id-1]
-        img_mean = np_img_mean[ch_id-1]
+        img = np_img[ch_id]
+        img_mean = np_img_mean[ch_id]
 
         img = Image.fromarray(img)
         img_mean = Image.fromarray(img_mean)
